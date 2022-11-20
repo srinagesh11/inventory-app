@@ -1,3 +1,5 @@
+create database if not EXISTS items_db;
+use items_db;
 CREATE TABLE IF NOT EXISTS `items` (
     `id`            int(11)         NOT NULL AUTO_INCREMENT,
     `name`          varchar(255)    NOT NULL,

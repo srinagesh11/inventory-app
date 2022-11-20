@@ -7,7 +7,6 @@ import (
 	db "server/db"
 	routes "server/routes"
 	storage "server/storage"
-	"time"
 )
 
 func main() {
@@ -24,12 +23,12 @@ func main() {
 	defer driver.Close()
 
 	// setup the tables
-	time.Sleep(5 * time.Second)
-	if err := driver.SetupTables(); err != nil {
-		fmt.Println("Error setting up the tables: ", err)
-		os.Exit(1)
-	}
-	fmt.Println("Tables created successfully")
+	// time.Sleep(5 * time.Second)
+	// if err := driver.SetupTables(); err != nil {
+	// 	fmt.Println("Error setting up the tables: ", err)
+	// 	os.Exit(1)
+	// }
+	// fmt.Println("Tables created successfully")
 
 	// create a new service
 	service := storage.NewService(driver)

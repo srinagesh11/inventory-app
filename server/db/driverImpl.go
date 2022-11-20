@@ -21,8 +21,9 @@ func NewDriver(cfg *config.Config) (Driver, error) {
 	fmt.Println("DB_NAME: ", cfg.DbName)
 
 	// create the database connection
-	connString := "root" + ":" + "srinagesh" + "@tcp(" + cfg.DbHost + ":3306)/" + cfg.DbName
-	db, err := sql.Open("mysql", connString)
+	//connString := "root" + ":" + "password" + "@tcp(" + cfg.DbHost + ":3306)/" + cfg.DbName
+	db, err := sql.Open("mysql", "test:password@tcp(db:3306)/items_db")
+	//db, err := sql.Open("mysql", connString)
 	if err != nil {
 		return nil, err
 	}

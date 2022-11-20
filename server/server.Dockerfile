@@ -1,5 +1,5 @@
 # base image needed for our application
-FROM golang:1.18
+FROM golang:1.19
 
 # Set the environment variables
 ARG DB_USER
