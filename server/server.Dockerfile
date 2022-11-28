@@ -1,21 +1,25 @@
-# base image needed for our application
-FROM golang:1.19
-
-# Set the environment variables
-ARG DB_USER
-ARG DB_PASSWORD
-ENV DB_USER $DB_USER
-ENV DB_PASSWORD $DB_PASSWORD
-
-# Create and change to the app directory.
-RUN mkdir -p /app
-
-# Set the Current Working Directory inside the container
+FROM golang:1.16.0-alpine
 WORKDIR /app
 
-# build the Go app
-COPY . .
-RUN go build -o main .
+# add some necessary packages
+RUN apk update && \
+    apk add libc-dev && \
+    apk add gcc && \
+    apk add make
 
-# Run the application.
-CMD ["./main"]
+# prevent the re-installation of vendors at every change in the source code
+COPY ./go.mod go.sum ./
+RUN go mod download && go mod verify
+
+# Install Compile Daemon for go. We'll use it to watch changes in go files
+RUN go get github.com/githubnemo/CompileDaemon
+
+# Copy and build the app
+COPY . .
+COPY ./entrypoint.sh /entrypoint.sh
+
+# wait-for-it requires bash, which alpine doesn't ship with by default. Use wait-for instead
+ADD https://raw.githubusercontent.com/eficode/wait-for/v2.1.0/wait-for /usr/local/bin/wait-for
+RUN chmod +rx /usr/local/bin/wait-for /entrypoint.sh
+
+ENTRYPOINT [ "sh", "/entrypoint.sh" ]
